@@ -2,6 +2,7 @@ package to.cwa.trocado;
 
 import com.googlecode.objectify.ObjectifyService;
 import to.cwa.trocado.om.Account;
+import to.cwa.trocado.om.Expense;
 
 /**
  * Lazy loading singleton that initializes the entire system
@@ -12,6 +13,7 @@ import to.cwa.trocado.om.Account;
 public class Trocado {
     private Trocado() {
         ObjectifyService.register(Account.class);
+        ObjectifyService.register(Expense.class);
     }
 
     public static Trocado instance() {
