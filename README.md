@@ -1,5 +1,9 @@
-endpoints-skeleton
+trocado
 ==================
+
+## Developers
+
+[Read this if you are developing trocado](DEVELOPING.md)
 
 A skeleton application for Google Cloud Endpoints in Java.
 
