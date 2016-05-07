@@ -1,0 +1,47 @@
+<md-dialog aria-label="Upload Expenses" ng-cloak>
+    <form>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Upload Expenses</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="vm.cancel()">
+                    <md-icon md-font-set="material-icons" aria-label="Close dialog">close</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content>
+            <div class="md-dialog-content">
+                <h2>Upload You Expenses</h2>
+
+                <p>
+                    You can upload a file with your expenses to be imported as a batch.
+                </p>
+                <choose-file layout="row">
+                    <input id="fileInput" type="file" class="ng-hide" file-model="vm.file">
+                    <md-input-container flex class="md-block">
+                        <label>File to upload</label>
+                        <input type="text" ng-model="fileName" aria-label="File name" ng-readonly="true">
+                    </md-input-container>
+                    <div>
+                        <md-button id="uploadButton" class="md-fab md-mini">
+                            <md-icon class="material-icons">attach_file</md-icon>
+                        </md-button>
+                    </div>
+                </choose-file>
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+            <span flex></span>
+            <md-button class="md-raised md-warn" ng-click="vm.cancel()">
+                <md-icon md-font-set="material-icons">cancel</md-icon> Cancel
+            </md-button>
+            <md-button class="md-raised md-primary" ng-click="vm.upload()" style="margin-right:20px;">
+                <md-icon md-font-set="material-icons">file_upload</md-icon> Upload
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>
+<div ng-if="false" layout="column">
+    <md-content>
+    </md-content>
+</div>

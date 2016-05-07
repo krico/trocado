@@ -1,5 +1,5 @@
 /*global angular*/
 (function (angular) {
     'use strict';
-    angular.module('trocado.expenses', ['trocado.directives']);
+    angular.module('trocado.directives', []);
 }(angular));
