@@ -21,39 +21,7 @@
     <md-sidenav ng-if="false" md-is-locked-open="true" class="md-whiteframe-z2">
         Sidenav
     </md-sidenav>
-    <md-content flex id="content">
-        <md-autocomplete placeholder="$ your expense (ex: 12.32 lunch)"
-                         md-autoselect="true"
-                         md-selected-item="app.selectedItem"
-                         md-search-text="app.searchText"
-                         md-items="item in app.getMatches(app.searchText)"
-                         md-item-text="item.display"
-                         md-no-cache="true"
-                         md-selected-item-change="app.selected()">
-            <md-item-template>
-                <span md-highlight-text="app.searchText">{{item.amount | currency}} {{item.display}}</span>
-            </md-item-template>
-            <md-not-found>
-                No matches found.
-            </md-not-found>
-        </md-autocomplete>
-
-        <md-list>
-            <md-subheader class="md-no-sticky">{{app.expenses.length}} expenses</md-subheader>
-            <md-list-item class="md-2-line" ng-repeat="item in app.expenses" ng-click="app.viewExpense($event, item)">
-                <div class="md-list-item-text">
-                    <h4>{{item.amount | currency}} {{item.display}}</h4>
-
-                    <p class="md-caption">{{item.created | date}}</p>
-                </div>
-                <md-button class="md-secondary" aria-label="delete" ng-click="app.deleteExpense($event, item)">
-                    <md-icon md-font-set="material-icons">delete</md-icon>
-                </md-button>
-                <md-divider ng-if="!$last"></md-divider>
-            </md-list-item>
-        </md-list>
-
-    </md-content>
+    <md-content flex id="content" ui-view></md-content>
 </div>
 
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
@@ -61,8 +29,8 @@
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.18/angular-ui-router.min.js"></script>
 <script src="build/trocado.js"></script>
-
-<!--<md-icon md-font-set="material-icons">attach_money</md-icon>-->
+<script src="build/trocado.tpl.min.js"></script>
 </body>
 </html>

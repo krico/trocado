@@ -2,7 +2,8 @@
 (function (angular) {
     'use strict';
     angular.module('trocado', [
-        'ng', 'ngMaterial',
+        'ng', 'ngMaterial', 'ui.router',
+        'trocado.expenses', 'trocado.templates',
         'account.endpoint', 'expense.endpoint'
     ]);
 

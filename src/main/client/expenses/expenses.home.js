@@ -1,33 +1,36 @@
 /*global angular*/
 (function (angular) {
     'use strict';
-    angular.module('trocado').controller('ApplicationController', ApplicationController);
+    angular.module('trocado.expenses').controller('ExpensesHomeController', ExpensesHomeController);
 
-    function ApplicationController($log) {
-        var app = this;
-        app.expenses = [it('11.50 lunch'), it('5,20 Starbucks'), it('Wallmart 115.98'), it('Gas 31')];
-        app.getMatches = getMatches;
-        app.selected = selected;
-        app.viewExpense = viewExpense;
-        app.deleteExpense = deleteExpense;
-        app.selectedItem = undefined;
-        app.searchText = '';
+    var counter = 198;
 
-        function viewExpense($event, item) {
-            $log.debug('viewExpense: ' + angular.toJson($event));
-            $log.debug('viewExpense: ' + angular.toJson(item));
+    function ExpensesHomeController($log, $state, $timeout) {
+        var vm = this;
+        vm.expenses = [it('11.50 lunch'), it('5,20 Starbucks'), it('Wallmart 115.98'), it('Gas 31')];
+        vm.getMatches = getMatches;
+        vm.selected = selected;
+        vm.viewExpense = viewExpense;
+        vm.deleteExpense = deleteExpense;
+        vm.selectedItem = undefined;
+        vm.searchText = '';
+
+        function viewExpense($event, expense) {
+            $timeout(function () {
+                $state.go('expenses.detail', {id: expense.id, expense: expense})
+            }, 200);
         }
 
-        function deleteExpense($event, item) {
-            var idx = app.expenses.indexOf(item);
-            app.expenses.splice(idx, 1);
+        function deleteExpense($event, expense) {
+            var idx = vm.expenses.indexOf(expense);
+            vm.expenses.splice(idx, 1);
         }
 
         function selected() {
-            if (app.selectedItem && app.selectedItem.display && app.selectedItem.display != '') {
-                app.expenses.unshift(app.selectedItem);
-                app.selectedItem = undefined;
-                app.searchText = '';
+            if (vm.selectedItem && vm.selectedItem.display && vm.selectedItem.display != '') {
+                vm.expenses.unshift(vm.selectedItem);
+                vm.selectedItem = undefined;
+                vm.searchText = '';
             }
         }
 
@@ -35,7 +38,7 @@
             var item = it(text);
             var found = [item];
             if (item.display && item.display.length >= 1) {
-                angular.forEach(app.expenses, function (v) {
+                angular.forEach(vm.expenses, function (v) {
                     if (v.display.indexOf(item.display) > -1) {
                         found.push(angular.copy(v));
                     }
@@ -62,6 +65,7 @@
                 text = '';
             }
             return {
+                id: ++counter,
                 amount: amount,
                 display: text,
                 created: new Date(),
@@ -73,5 +77,4 @@
             }
         }
     }
-
 }(angular));
