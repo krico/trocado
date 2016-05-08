@@ -3,7 +3,7 @@
     'use strict';
     angular.module('trocado.expenses').controller('UploadDialogController', UploadDialogController);
 
-    function UploadDialogController($log, $mdDialog, Upload) {
+    function UploadDialogController($log, $mdDialog, $mdToast, FileUpload) {
         var vm = this;
         vm.hide = hide;
         vm.cancel = cancel;
@@ -19,26 +19,18 @@
         }
 
         function upload() {
-            $log.debug(vm.file);
-            var reader = new FileReader();
-            reader.onload = function (e) {
-                uploadFile(vm.file, btoa(e.target.result));
-            };
-            reader.readAsBinaryString(vm.file);
-        }
-
-        function uploadFile(file, data) {
-            return Upload.upload({
-                name: file.name,
-                size: file.size,
-                type: file.type,
-                lastModified: file.lastModified,
-                base64Data: data
-            }).then(ok, fail);
-
+            return FileUpload.upload(vm.file).then(ok, fail);
             function ok(r) {
-                $log.debug('ok: ' + angular.toJson(r.data));
+                var toast = $mdToast.simple()
+                    .textContent('Upload complete!')
+                    .action('dismiss')
+                    .highlightAction(false);
+//                    .position($scope.getToastPosition());
+
                 $mdDialog.hide();
+                $mdToast.show(toast);
+
+                $log.debug('ok: ' + angular.toJson(r));
             }
 
             function fail(r) {

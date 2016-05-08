@@ -5,7 +5,7 @@
         'ng', 'ngMaterial', 'ui.router',
         'trocado.expenses', 'trocado.templates',
         'account.endpoint', 'expense.endpoint',
-        'upload.endpoint'
+        'upload.endpoint', 'trocado.services'
     ]);
 
     angular.module('trocado').config(configTrocado);
