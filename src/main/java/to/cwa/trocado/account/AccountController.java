@@ -1,9 +1,11 @@
-package to.cwa.trocado.spi;
+package to.cwa.trocado.account;
 
 import com.google.api.server.spi.config.*;
 import com.googlecode.objectify.Key;
-import to.cwa.trocado.om.Account;
-import to.cwa.trocado.util.ControllerUtil;
+import to.cwa.trocado.controller.EntityNotFoundException;
+import to.cwa.trocado.controller.IllegalEntityException;
+import to.cwa.trocado.account.om.Account;
+import to.cwa.trocado.controller.Checks;
 
 import java.util.List;
 
@@ -19,14 +21,14 @@ public class AccountController {
 
     @ApiMethod(name = "save", path = "accounts", httpMethod = ApiMethod.HttpMethod.POST)
     public Account save(Account entity) throws IllegalEntityException {
-        ControllerUtil.checkIdIsNull(entity);
+        Checks.checkIdIsNull(entity);
         ofy().save().entity(entity).now();
         return entity;
     }
 
     @ApiMethod(name = "get", path = "accounts/{id}", httpMethod = ApiMethod.HttpMethod.GET)
     public Account get(@Named("id") Long id) throws EntityNotFoundException {
-        return ControllerUtil.checkFound(ofy().load().key(Key.create(Account.class, id)).now());
+        return Checks.checkFound(ofy().load().key(Key.create(Account.class, id)).now());
     }
 
     @ApiMethod(name = "query", path = "accounts", httpMethod = ApiMethod.HttpMethod.GET)

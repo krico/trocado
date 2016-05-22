@@ -1,14 +1,12 @@
-package to.cwa.trocado.util;
+package to.cwa.trocado.controller;
 
 import to.cwa.trocado.om.HasId;
-import to.cwa.trocado.spi.EntityNotFoundException;
-import to.cwa.trocado.spi.IllegalEntityException;
 
 /**
  * @author krico
  * @since 09/02/16.
  */
-public final class ControllerUtil {
+public final class Checks {
     /*
         Corresponding HTTP Status Code
         com.google.api.server.spi.response.BadRequestException	HTTP 400
@@ -19,12 +17,13 @@ public final class ControllerUtil {
         com.google.api.server.spi.response.InternalServerErrorException	HTTP 500
         com.google.api.server.spi.response.ServiceUnavailableException	HTTP 503
      */
-    private ControllerUtil() {
+    private Checks() {
     }
 
     public static void checkIdIsNull(HasId<?> entity) throws IllegalEntityException {
         if (entity.getId() != null)
-            throw new IllegalEntityException(entity, "ID expected: null (actual: " + entity.getId() + ")");
+            throw new IllegalEntityException(entity, entity.getClass().getSimpleName() +
+                    " ID expected: null (actual: " + entity.getId() + ")");
     }
 
     public static <T> T checkFound(T entity) throws EntityNotFoundException {

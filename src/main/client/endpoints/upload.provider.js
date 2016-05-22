@@ -37,14 +37,23 @@
         };
         provider.$get = ['$http', function ($http) {
             var svc = {
-                upload: upload
+                get: get,
+                save: save
             };
 
-            function upload(resource) {
+            function get(id) {
+                return $http({
+                    method: 'GET',
+                    url: provider.apiPath('uploads/' + id + ''),
+                    params: provider.parameters({})
+                });
+            }
+
+            function save(resource) {
                 return $http({
                     method: 'POST',
                     data: resource,
-                    url: provider.apiPath('upload'),
+                    url: provider.apiPath('uploads'),
                     params: provider.parameters({})
                 });
             }

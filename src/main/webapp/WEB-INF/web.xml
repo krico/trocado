@@ -14,9 +14,9 @@
         <init-param>
             <param-name>services</param-name>
             <param-value>
-                to.cwa.trocado.spi.AccountController,
-                to.cwa.trocado.spi.ExpenseController,
-                to.cwa.trocado.spi.UploadController
+                to.cwa.trocado.account.AccountController,
+                to.cwa.trocado.expense.ExpenseController,
+                to.cwa.trocado.upload.UploadController
             </param-value>
         </init-param>
     </servlet>

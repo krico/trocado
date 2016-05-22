@@ -1,4 +1,4 @@
-package to.cwa.trocado.spi;
+package to.cwa.trocado.controller;
 
 import com.google.api.server.spi.ServiceException;
 

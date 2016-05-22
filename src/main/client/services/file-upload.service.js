@@ -13,7 +13,7 @@
                     var b64data = btoa(e.target.result);
 
                     $timeout(function () {
-                        Upload.upload({
+                        Upload.save({
                             name: file.name,
                             size: file.size,
                             type: file.type,
