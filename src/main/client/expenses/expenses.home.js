@@ -5,9 +5,9 @@
 
     var counter = 198;
 
-    function ExpensesHomeController($log, $state, $timeout) {
+    function ExpensesHomeController($log, $state, $timeout, Dialog, Expense, expenses) {
         var vm = this;
-        vm.expenses = [it('11.50 lunch'), it('5,20 Starbucks'), it('Wallmart 115.98'), it('Gas 31')];
+        vm.expenses = expenses.data.items; //[it('11.50 lunch'), it('5,20 Starbucks'), it('Wallmart 115.98'), it('Gas 31')];
         vm.getMatches = getMatches;
         vm.selected = selected;
         vm.viewExpense = viewExpense;
@@ -27,26 +27,38 @@
         }
 
         function selected() {
-            if (vm.selectedItem && vm.selectedItem.display && vm.selectedItem.display != '') {
+            if (vm.selectedItem && vm.selectedItem.description && vm.selectedItem.description != '') {
+                Expense.save({
+                    description: vm.selectedItem.description,
+                    amount: vm.selectedItem.amount
+                });
+
                 vm.expenses.unshift(vm.selectedItem);
                 vm.selectedItem = undefined;
                 vm.searchText = '';
             }
         }
 
+        var count = 0;
+
         function getMatches(text) {
             var item = it(text);
             var found = [item];
-            if (item.display && item.display.length >= 1) {
-                angular.forEach(vm.expenses, function (v) {
-                    if (v.display.indexOf(item.display) > -1) {
+            var id = ++count;
+            return Expense.query().then(ok, fail);
+
+            function ok(r) {
+                angular.forEach(r.data.items, function (v) {
+                    if (v.description.indexOf(item.description) > -1) {
                         found.push(angular.copy(v));
                     }
                 });
+                return found;
             }
 
-            $log.debug('found[' + found.length + '] = ' + angular.toJson(found));
-            return found;
+            function fail(r) {
+                Dialog.showAlert('Request failed', 'Something went wrong...');
+            }
 
         }
 
@@ -67,7 +79,7 @@
             return {
                 id: ++counter,
                 amount: amount,
-                display: text,
+                description: text,
                 created: new Date(),
                 labels: [text]
             };

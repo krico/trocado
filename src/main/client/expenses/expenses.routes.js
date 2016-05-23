@@ -16,7 +16,12 @@
             .state('expenses.home', {
                 url: '/home',
                 templateUrl: 'expenses/expenses.home.html',
-                controller: 'ExpensesHomeController as vm'
+                controller: 'ExpensesHomeController as vm',
+                resolve: {
+                    expenses: function (Expense) {
+                        return Expense.query();
+                    }
+                }
             })
             .state('expenses.detail', {
                 url: '/detail/{id:int}',

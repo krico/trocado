@@ -3,11 +3,11 @@
                  md-selected-item="vm.selectedItem"
                  md-search-text="vm.searchText"
                  md-items="item in vm.getMatches(vm.searchText)"
-                 md-item-text="item.display"
+                 md-item-text="item.description"
                  md-no-cache="true"
                  md-selected-item-change="vm.selected()">
     <md-item-template>
-        <span md-highlight-text="vm.searchText">{{item.amount | currency}} {{item.display}}</span>
+        <span md-highlight-text="vm.searchText">{{item.amount | currency}} {{item.description}}</span>
     </md-item-template>
     <md-not-found>
         No matches found.
@@ -16,7 +16,7 @@
 <md-list>
     <md-list-item class="md-2-line" ng-repeat="item in vm.expenses" ng-click="vm.viewExpense($event, item)">
         <div class="md-list-item-text">
-            <h4>{{item.amount | currency}} {{item.display}}</h4>
+            <h4>{{item.amount | currency}} {{item.description}}</h4>
 
             <p class="md-caption">{{item.created | date}}</p>
         </div>
