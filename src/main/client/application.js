@@ -5,7 +5,7 @@
 
     function ApplicationController($log, $rootScope, Dialog) {
         var app = this;
-
+        app.toolbar = 'toolbar.html';
         $rootScope.$on('$stateNotFound', onStateNotFound);
 
         function onStateNotFound(event, unfoundState, fromState, fromParams) {

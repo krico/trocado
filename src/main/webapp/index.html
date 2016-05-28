@@ -11,23 +11,8 @@
     <link rel="stylesheet" href="build/trocado.css"/>
 </head>
 <body ng-app="trocado" ng-controller="ApplicationController as app" layout="column" ng-cloak>
-<md-toolbar ng-controller="ToolbarController as tool" layout="row">
-    <div class="md-toolbar-tools">
-        <md-button class="md-icon-button" aria-label="Settings">
-            <md-icon md-font-set="material-icons">menu</md-icon>
-        </md-button>
-        <h2>
-            <span>Meus Trocados</span>
-        </h2>
-        <span flex></span>
-        <md-button class="md-icon-button" aria-label="Upload" ng-click="tool.upload($event)">
-            <md-icon md-font-set="material-icons">file_upload</md-icon>
-        </md-button>
-        <md-button class="md-icon-button" aria-label="More">
-            <md-icon md-font-set="material-icons">more_vert</md-icon>
-        </md-button>
-    </div>
-</md-toolbar>
+
+<ng-include src="app.toolbar"></ng-include>
 
 <div flex layout="row">
     <md-sidenav ng-if="false" md-is-locked-open="true" class="md-whiteframe-z2">

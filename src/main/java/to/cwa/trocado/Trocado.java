@@ -4,6 +4,7 @@ import com.googlecode.objectify.ObjectifyService;
 import to.cwa.trocado.account.om.Account;
 import to.cwa.trocado.expense.om.ChaseImportedExpense;
 import to.cwa.trocado.expense.om.Expense;
+import to.cwa.trocado.expense.om.ImportKey;
 
 /**
  * Lazy loading singleton that initializes the entire system
@@ -20,6 +21,7 @@ public class Trocado {
         ObjectifyService.register(Account.class);
         ObjectifyService.register(Expense.class);
         ObjectifyService.register(ChaseImportedExpense.class);
+        ObjectifyService.register(ImportKey.class);
     }
 
     public static Trocado instance() {

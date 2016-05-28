@@ -7,7 +7,7 @@
 
     function ExpensesHomeController($log, $state, $timeout, Dialog, Expense, expenses) {
         var vm = this;
-        vm.expenses = expenses.data.items; //[it('11.50 lunch'), it('5,20 Starbucks'), it('Wallmart 115.98'), it('Gas 31')];
+        vm.expenses = expenses.data.items;
         vm.getMatches = getMatches;
         vm.selected = selected;
         vm.viewExpense = viewExpense;
@@ -24,6 +24,7 @@
         function deleteExpense($event, expense) {
             var idx = vm.expenses.indexOf(expense);
             vm.expenses.splice(idx, 1);
+            Expense.delete(expense.id);
         }
 
         function selected() {
@@ -80,7 +81,7 @@
                 id: ++counter,
                 amount: amount,
                 description: text,
-                created: new Date(),
+                date: new Date(),
                 labels: [text]
             };
             function amt(v, dec) {

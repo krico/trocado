@@ -3,6 +3,7 @@ package to.cwa.trocado.expense.om;
 import com.google.appengine.api.datastore.Category;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.OnSave;
 import to.cwa.trocado.om.HasId;
 import to.cwa.trocado.util.BigDecimalUtil;
@@ -22,17 +23,21 @@ public class Expense implements HasId<Long> {
     /**
      * Creation date of this expense (first time it was saved)
      */
+    @Index
     private Date created;
     /**
      * Last time this expense was modified
      */
+    @Index
     private Date modified;
     /**
      * when this expense happened
      */
+    @Index
     private Date date;
     private String description;
     private long amount;
+    @Index
     private Category origin;
 
     public Expense() {

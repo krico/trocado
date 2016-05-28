@@ -1,5 +1,10 @@
 package to.cwa.trocado.upload.om;
 
+import org.apache.commons.codec.binary.Base64;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.io.Serializable;
 
 /**
@@ -51,6 +56,11 @@ public class Upload implements Serializable {
 
     public void setBase64Data(String base64Data) {
         this.base64Data = base64Data;
+    }
+
+    public Reader openReader() {
+        ByteArrayInputStream bis = new ByteArrayInputStream(Base64.decodeBase64(base64Data));
+        return new InputStreamReader(bis);
     }
 
     @Override

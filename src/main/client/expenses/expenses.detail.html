@@ -3,7 +3,7 @@
     <md-input-container class="md-icon-float md-block">
         <label>Expense</label>
         <md-icon md-font-set="material-icons">description</md-icon>
-        <input ng-model="vm.expense.display" type="text">
+        <input ng-model="vm.expense.description" type="text">
     </md-input-container>
     <md-input-container class="md-icon-float md-icon-right md-block">
         <label>Amount</label>
@@ -16,6 +16,6 @@
             <input ng-model="vm.expense.location" type="text" placeholder="Address">
             <md-icon md-font-set="material-icons" style="display:inline-block;">place</md-icon>
         </md-input-container>
-        <md-datepicker ng-model="vm.expense.created" md-placeholder="When"></md-datepicker>
+        <md-datepicker ng-model="vm.expense.date" md-placeholder="When"></md-datepicker>
     </div>
 </div>

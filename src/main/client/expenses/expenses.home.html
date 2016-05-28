@@ -18,7 +18,7 @@
         <div class="md-list-item-text">
             <h4>{{item.amount | currency}} {{item.description}}</h4>
 
-            <p class="md-caption">{{item.created | date}}</p>
+            <p class="md-caption">{{item.date | date}}</p>
         </div>
         <md-button class="md-secondary" aria-label="delete" ng-click="vm.deleteExpense($event, item)">
             <md-icon md-font-set="material-icons">delete</md-icon>

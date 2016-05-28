@@ -3,7 +3,7 @@
     'use strict';
     angular.module('trocado.expenses').controller('UploadDialogController', UploadDialogController);
 
-    function UploadDialogController($log, $mdDialog, $mdToast, FileUpload) {
+    function UploadDialogController($log, $mdDialog, $mdToast, FileUpload, Expense) {
         var vm = this;
         vm.hide = hide;
         vm.cancel = cancel;
@@ -19,7 +19,13 @@
         }
 
         function upload() {
-            return FileUpload.upload(vm.file).then(ok, fail);
+            return FileUpload.upload(vm.file).then(onUploadComplete, fail);
+
+            function onUploadComplete(r) {
+                $log.debug('onUploadComplete: ' + angular.toJson(r));
+                return Expense.batch(r).then(ok, fail);
+            }
+
             function ok(r) {
                 var toast = $mdToast.simple()
                     .textContent('Upload complete!')

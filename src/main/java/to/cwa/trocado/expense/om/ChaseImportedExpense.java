@@ -1,6 +1,8 @@
 package to.cwa.trocado.expense.om;
 
 import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Index;
+import com.googlecode.objectify.annotation.Subclass;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -9,7 +11,7 @@ import java.util.Date;
  * @author krico
  * @since 18/05/16.
  */
-@Entity
+@Subclass(index=true)
 public class ChaseImportedExpense extends Expense {
     public static enum ChaseType {
         CREDIT, DEBIT, CHECK
@@ -17,6 +19,8 @@ public class ChaseImportedExpense extends Expense {
 
     private String checkOrPlaySlipNumber;
     private ChaseType chaseType;
+    @Index
+    private String importKey;
 
     public ChaseImportedExpense() {
         super(Origins.Import);
@@ -26,6 +30,14 @@ public class ChaseImportedExpense extends Expense {
         super(Origins.Import, description, amount, date);
         this.checkOrPlaySlipNumber = checkOrPlaySlipNumber;
         this.chaseType = type;
+    }
+
+    public String getImportKey() {
+        return importKey;
+    }
+
+    public void setImportKey(String importKey) {
+        this.importKey = importKey;
     }
 
     public String getCheckOrPlaySlipNumber() {
@@ -73,7 +85,8 @@ public class ChaseImportedExpense extends Expense {
     public String toString() {
         return "ChaseImportedExpense{" +
                 "checkOrPlaySlipNumber='" + checkOrPlaySlipNumber + '\'' +
-                ", chaseType=" + chaseType +
+                "checkOrPlaySlipNumber='" + checkOrPlaySlipNumber + '\'' +
+                ", importKey=" + importKey +
                 '}' + super.toString();
     }
 }
