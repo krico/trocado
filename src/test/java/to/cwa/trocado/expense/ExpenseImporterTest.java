@@ -13,8 +13,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.*;
 import static to.cwa.trocado.expense.om.ChaseImportedExpense.ChaseType.*;
 import static to.cwa.trocado.util.DateUtil.parseUSDate;
 
@@ -27,10 +26,10 @@ public class ExpenseImporterTest {
 
     @Before
     public void createExpected() throws ParseException {
-        expected.add(new ChaseImportedExpense(D3, new BigDecimal("-120.00"), "9999", parseUSDate("03/08/2016"), CHECK));
-        expected.add(new ChaseImportedExpense(D1, new BigDecimal("1234.56"), "", parseUSDate("02/29/2016"), CREDIT));
-        expected.add(new ChaseImportedExpense(D2, new BigDecimal("-27.75"), "", parseUSDate("02/29/2016"), DEBIT));
-        expected.add(new ChaseImportedExpense(D4, new BigDecimal("3000.00"), "", parseUSDate("02/18/2016"), CREDIT));
+        expected.add(new ChaseImportedExpense(D3, new BigDecimal("-120.00"), "9999", parseUSDate("03/08/2016"), CHECK, "201603080000001"));
+        expected.add(new ChaseImportedExpense(D1, new BigDecimal("1234.56"), "", parseUSDate("02/29/2016"), CREDIT, "201602290000002"));
+        expected.add(new ChaseImportedExpense(D2, new BigDecimal("-27.75"), "", parseUSDate("02/29/2016"), DEBIT, "201602290000001"));
+        expected.add(new ChaseImportedExpense(D4, new BigDecimal("3000.00"), "", parseUSDate("02/18/2016"), CREDIT, "201602180000001"));
     }
 
     @Test
@@ -48,6 +47,8 @@ public class ExpenseImporterTest {
 
             assertEquals("toString", expectedExpense.toString(), actualExpense.toString());
             assertEquals("equals", expectedExpense, actualExpense);
+            expectedExpense.setImportKey("NO");
+            assertFalse(expectedExpense.equals(actualExpense));
         }
     }
 }

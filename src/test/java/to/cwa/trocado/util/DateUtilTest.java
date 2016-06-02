@@ -18,6 +18,11 @@ public class DateUtilTest {
     }
 
     @Test
+    public void formatComparableDate() {
+        assertEquals("19760715", DateUtil.formatComparableDate(mkDay().getTime()));
+    }
+
+    @Test
     public void formatUSDate() {
         assertEquals("07/15/1976", DateUtil.formatUSDate(mkDay().getTime()));
     }

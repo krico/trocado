@@ -3,9 +3,8 @@
     'use strict';
     angular.module('trocado', [
         'ng', 'ngMaterial', 'ui.router',
-        'trocado.expenses', 'trocado.templates',
-        'account.endpoint', 'expense.endpoint',
-        'upload.endpoint', 'trocado.services'
+        'trocado.constants', 'trocado.expenses', 'trocado.templates', 'trocado.services',
+        'account.endpoint', 'expense.endpoint', 'upload.endpoint'
     ]);
 
     angular.module('trocado').config(configTrocado);

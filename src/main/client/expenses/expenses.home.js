@@ -5,15 +5,31 @@
 
     var counter = 198;
 
-    function ExpensesHomeController($log, $state, $timeout, Dialog, Expense, expenses) {
+    function ExpensesHomeController($rootScope, $state, $timeout, Dialog, Expense, expenses, ToolbarEvents) {
         var vm = this;
         vm.expenses = expenses.data.items;
         vm.getMatches = getMatches;
         vm.selected = selected;
         vm.viewExpense = viewExpense;
         vm.deleteExpense = deleteExpense;
+        vm.refresh = refresh;
         vm.selectedItem = undefined;
         vm.searchText = '';
+
+        $rootScope.$on(ToolbarEvents.Refresh, vm.refresh);
+
+        function refresh() {
+            Expense.query().then(ok, fail);
+
+            function ok(r) {
+                vm.expenses = r.data.items;
+            }
+
+            function fail(r) {
+                Dialog.showAlert('Refresh failed', 'Something went wrong...');
+            }
+
+        }
 
         function viewExpense($event, expense) {
             $timeout(function () {

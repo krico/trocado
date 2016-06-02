@@ -13,8 +13,13 @@ import java.util.TimeZone;
  */
 public final class DateUtil {
     private static final FastDateFormat US_DATE = FastDateFormat.getInstance("MM/dd/yyyy", TimeZone.getTimeZone("UTC"), Locale.ROOT);
+    private static final FastDateFormat COMPARABLE_DATE = FastDateFormat.getInstance("yyyyMMdd", TimeZone.getTimeZone("UTC"), Locale.ROOT);
 
     private DateUtil() {
+    }
+
+    public static String formatComparableDate(Date date) {
+        return COMPARABLE_DATE.format(date);
     }
 
     public static String formatUSDate(Date date) {

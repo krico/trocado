@@ -1,6 +1,5 @@
 package to.cwa.trocado.expense.om;
 
-import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.Subclass;
 
@@ -13,7 +12,7 @@ import java.util.Date;
  */
 @Subclass(index=true)
 public class ChaseImportedExpense extends Expense {
-    public static enum ChaseType {
+    public enum ChaseType {
         CREDIT, DEBIT, CHECK
     }
 
@@ -26,10 +25,11 @@ public class ChaseImportedExpense extends Expense {
         super(Origins.Import);
     }
 
-    public ChaseImportedExpense(String description, BigDecimal amount, String checkOrPlaySlipNumber, Date date, ChaseType type) {
+    public ChaseImportedExpense(String description, BigDecimal amount, String checkOrPlaySlipNumber, Date date, ChaseType type, String importKey) {
         super(Origins.Import, description, amount, date);
         this.checkOrPlaySlipNumber = checkOrPlaySlipNumber;
         this.chaseType = type;
+        this.importKey = importKey;
     }
 
     public String getImportKey() {
@@ -50,7 +50,6 @@ public class ChaseImportedExpense extends Expense {
 
 
     public ChaseType getChaseType() {
-
         return chaseType;
     }
 
@@ -66,11 +65,11 @@ public class ChaseImportedExpense extends Expense {
 
         ChaseImportedExpense that = (ChaseImportedExpense) o;
 
-        if (chaseType != that.chaseType) return false;
         if (checkOrPlaySlipNumber != null ? !checkOrPlaySlipNumber.equals(that.checkOrPlaySlipNumber) : that.checkOrPlaySlipNumber != null)
             return false;
+        if (chaseType != that.chaseType) return false;
+        return importKey != null ? importKey.equals(that.importKey) : that.importKey == null;
 
-        return true;
     }
 
     @Override
@@ -78,6 +77,7 @@ public class ChaseImportedExpense extends Expense {
         int result = super.hashCode();
         result = 31 * result + (checkOrPlaySlipNumber != null ? checkOrPlaySlipNumber.hashCode() : 0);
         result = 31 * result + (chaseType != null ? chaseType.hashCode() : 0);
+        result = 31 * result + (importKey != null ? importKey.hashCode() : 0);
         return result;
     }
 
@@ -85,8 +85,8 @@ public class ChaseImportedExpense extends Expense {
     public String toString() {
         return "ChaseImportedExpense{" +
                 "checkOrPlaySlipNumber='" + checkOrPlaySlipNumber + '\'' +
-                "checkOrPlaySlipNumber='" + checkOrPlaySlipNumber + '\'' +
-                ", importKey=" + importKey +
+                ", chaseType='" + chaseType + '\'' +
+                ", importKey='" + importKey + '\'' +
                 '}' + super.toString();
     }
 }

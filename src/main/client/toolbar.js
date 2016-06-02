@@ -3,9 +3,14 @@
     'use strict';
     angular.module('trocado').controller('ToolbarController', ToolbarController);
 
-    function ToolbarController($mdMedia, $mdDialog, $document) {
+    function ToolbarController($rootScope, $mdMedia, $mdDialog, $document, ToolbarEvents) {
         var tool = this;
         tool.upload = upload;
+        tool.refresh = refresh;
+
+        function refresh(ev) {
+            return $rootScope.$broadcast(ToolbarEvents.Refresh, ev);
+        }
 
         function upload(ev) {
             return $mdDialog.show({

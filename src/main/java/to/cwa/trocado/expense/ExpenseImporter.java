@@ -59,18 +59,24 @@ public class ExpenseImporter {
     private void setImportKeys(ArrayList<Expense> expenses) {
         //Because the chase import file is generated ordered by descending date
         //and because we want the importKey to be the same even if new entries
-        //were added to the chase import file.
-        //We create the key with an index that represents the reverse order.
-        //On a list with N entries, entry[0] gets index N, entry[1] gets N-1 and so on.
+        //were added to the chase import file we iterate the list in reverse order.
         int size = expenses.size();
+        String lastDate = "";
+        int lastDateCount = 1;
         for (int i = 0; i < size; ++i) {
-            ChaseImportedExpense importedExpense = (ChaseImportedExpense) expenses.get(i);
-            int keyIndex = size - i;
+            ChaseImportedExpense importedExpense = (ChaseImportedExpense) expenses.get(size - i - 1);
 
             //TODO: this should uniquely identify the user or group and the bank/account this is coming from
             String userIdentifier = "Chase-";
 
-            String key = String.format("%s-%05d", DateUtil.formatUSDate(importedExpense.getDate()), keyIndex);
+            String comparableDate = DateUtil.formatComparableDate(importedExpense.getDate());
+            if (comparableDate.equals(lastDate)) {
+                ++lastDateCount;
+            } else {
+                lastDateCount = 1;
+                lastDate = comparableDate;
+            }
+            String key = String.format("%s%07d", comparableDate, lastDateCount);
             importedExpense.setImportKey(key);
         }
 
