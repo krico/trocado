@@ -4,19 +4,76 @@
     angular.module('trocado.expenses').controller('ExpensesHomeController', ExpensesHomeController);
 
     var counter = 198;
+    var BATCH_SIZE = 50;
 
-    function ExpensesHomeController($rootScope, $state, $timeout, Dialog, Expense, expenses, ToolbarEvents) {
+    function ExpensesHomeController($rootScope, $state, $timeout, Dialog, Expense, expenses, DateUtil, ToolbarEvents) {
         var vm = this;
         vm.expenses = expenses.data.items;
+        vm.virtualItems = new VirtualRepeatModel(Expense);
+
         vm.getMatches = getMatches;
         vm.selected = selected;
         vm.viewExpense = viewExpense;
         vm.deleteExpense = deleteExpense;
         vm.refresh = refresh;
+
         vm.selectedItem = undefined;
         vm.searchText = '';
 
+        vm.sections = [];
+        vm.sectionExpenses = {};
+
+        vm.refresh();
+
         $rootScope.$on(ToolbarEvents.Refresh, vm.refresh);
+
+        function VirtualRepeatModel() {
+            this.cache = {start: 0, end: 0, max: BATCH_SIZE * 2, items: []};
+        }
+
+        VirtualRepeatModel.prototype.load = function (index) {
+            //TODO: unload when cache is too big
+            var end = index + BATCH_SIZE;
+            this.cache.end = end;
+            for (var i = index; i < end; ++i) {
+                this.cache.items[i] = null;
+            }
+            Expense.query(BATCH_SIZE, index).then(ok, fail);
+            var that = this;
+
+            function ok(r) {
+                var expenses = r.data.items;
+
+                var last = index;
+                for (var i = 0; i < expenses.length; ++i) {
+                    last = i + index;
+                    that.cache.items[last] = expenses[i];
+                }
+                if (expenses.length < BATCH_SIZE) {
+                    if (!that.cache.total) that.cache.total = index + expenses.length;
+                    that.cache.total = Math.min(that.cache.total, index + expenses.length);
+                    that.cache.max = that.cache.total;
+                } else {
+                    that.cache.max = Math.max(that.cache.max, last + 2);
+                }
+            }
+
+            function fail(r) {
+                Dialog.showAlert('Refresh failed', 'Something went wrong...');
+            }
+
+        };
+
+        VirtualRepeatModel.prototype.getItemAtIndex = function (index) {
+            if (index < 0) return null;
+            if (!(index >= this.cache.start && index < this.cache.end)) this.load(index);
+            return this.cache.items[index - this.cache.start];
+        };
+
+        VirtualRepeatModel.prototype.getLength = function () {
+            return this.cache.max;
+        };
+
 
         function refresh() {
             Expense.query().then(ok, fail);
@@ -100,6 +157,7 @@
                 date: new Date(),
                 labels: [text]
             };
+
             function amt(v, dec) {
                 if (dec) return parseFloat(v + '.' + dec.substring(1));
                 return parseFloat(v);

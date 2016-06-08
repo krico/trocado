@@ -2,6 +2,7 @@ package to.cwa.trocado.expense;
 
 import com.google.api.server.spi.config.*;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.cmd.Query;
 import to.cwa.trocado.controller.Checks;
 import to.cwa.trocado.controller.EntityNotFoundException;
 import to.cwa.trocado.controller.IllegalEntityException;
@@ -38,8 +39,14 @@ public class ExpenseController {
     }
 
     @ApiMethod(name = "query", path = "expenses", httpMethod = ApiMethod.HttpMethod.GET)
-    public List<Expense> query() {
-        return ofy().load().type(Expense.class).order("-date").list();
+    public List<Expense> query(
+            @Nullable @Named("offset") Integer offset,
+            @Nullable @Named("limit") Integer limit
+    ) {
+        Query<Expense> query = ofy().load().type(Expense.class).order("-date");
+        if (offset != null) query = query.offset(offset);
+        if (limit != null) query = query.limit(limit);
+        return query.list();
     }
 
     @ApiMethod(name = "update", path = "expenses/{id}", httpMethod = ApiMethod.HttpMethod.PUT)

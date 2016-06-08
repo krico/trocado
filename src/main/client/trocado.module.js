@@ -11,9 +11,11 @@
     angular.module('trocado').run(runTrocado);
 
     function configTrocado($mdThemingProvider, ExpenseProvider, UploadProvider) {
-        $mdThemingProvider.theme('default')
+        $mdThemingProvider
+            .theme('default')
             .primaryPalette('deep-purple')
-            .accentPalette('pink');
+            .accentPalette('pink')
+            .backgroundPalette('grey');
 
         UploadProvider.apiRoot('/_ah/api/upload/v1/');
         ExpenseProvider.apiRoot('/_ah/api/expense/v1/');

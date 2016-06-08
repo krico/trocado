@@ -50,7 +50,7 @@ public class ExpenseControllerTest {
     @Test
     public void testQuery() throws Exception {
         testSave();
-        List<Expense> expenses = controller.query();
+        List<Expense> expenses = controller.query(null, null);
         assertNotNull(expenses);
         assertEquals(1, expenses.size());
     }

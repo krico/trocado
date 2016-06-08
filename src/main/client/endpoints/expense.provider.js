@@ -124,11 +124,14 @@
                 });
             }
 
-            function query() {
+            function query(limit, offset) {
                 return $http({
                     method: 'GET',
                     url: provider.apiPath('expenses'),
-                    params: provider.parameters({}),
+                    params: provider.parameters({
+                        limit: limit,
+                        offset: offset
+                    }),
                     transformResponse: provider.responseTransformer($http.defaults.transformResponse, function (data) {
                         return new ExpenseCollection(data);
                     })
