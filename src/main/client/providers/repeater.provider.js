@@ -36,6 +36,8 @@
 
         function Page(id) {
             this.id = id;
+            this.next = null;
+            this.prev = null;
             this.data = [];
         }
 
@@ -53,17 +55,79 @@
             if (!angular.isFunction(loadCallback)) {
                 throw ("PageCache(loadCallback): loadCallback must be a function");
             }
-
+            if (provider._maxPages < 2) {
+                throw ("maxPages must be >2");
+            }
+            this.size = 0;
             this.pages = {};
+            this.head = null;
+            this.tail = null;
             this.loaderCallback = loadCallback;
         }
 
-        PageCache.prototype.getPage = function (pageNumber) {
-            if (!this.pages[pageNumber]) {
-                this.pages[pageNumber] = new Page(pageNumber);
-                this.loaderCallback(this.pages[pageNumber]);
+        PageCache.prototype.getSize = function () {
+            return this.size;
+        };
+
+        PageCache.prototype.insert = function (page) {
+            if (angular.isDefined(this.pages[page.id])) {
+                throw ("Duplicate page: " + page);
             }
-            return this.pages[pageNumber];
+            this.pages[page.id] = page;
+            if (this.head === null) {
+                //First page
+                page.next = null;
+                page.prev = null;
+                this.head = page;
+                this.tail = page;
+            } else {
+                page.next = this.head;
+                this.head.prev = page;
+                this.head = page;
+            }
+
+            if (this.size == provider._maxPages) {
+                //Don't grow, remove tail
+                var removed = this.tail;
+                if (provider._debug) $log.debug('Removing ' + removed);
+                delete this.pages[removed.id];
+                this.tail = removed.prev;
+                this.tail.next = null;
+
+                removed.next = null;
+                removed.prev = null;
+            } else {
+                this.size++;
+            }
+        };
+
+        PageCache.prototype.touch = function (page) {
+            if (page === this.head) return; //Alread at head
+
+            if (page === this.tail) {
+                this.tail = page.prev;
+            }
+
+            //Remove page from linked list
+            page.prev.next = page.next;
+            if (page.next !== null) page.next.prev = page.prev;
+
+            page.next = this.head;
+            this.head.prev = page;
+            this.head = page;
+            page.prev = null;
+        };
+
+        PageCache.prototype.getPage = function (pageNumber) {
+            var page = this.pages[pageNumber];
+            if (!page) {
+                page = new Page(pageNumber);
+                this.insert(page);
+                this.loaderCallback(page);
+            } else {
+                this.touch(page);
+            }
+            return page;
         };
 
         function Repeater(endpoint) {
@@ -87,12 +151,13 @@
         Repeater.prototype.toString = function () {
             return 'Repeater' +
                 '[debug=' + provider._debug + ']' +
+                '[cacheSize=' + this.cache.getSize() + ']' +
                 '[pageSize=' + provider._pageSize + ']' +
                 '[maxLength=' + this.maxLength + ']' +
                 '[maxPages=' + provider._maxPages + ']'
                 ;
         };
-        
+
         Repeater.prototype.loadPage = function (page) {
             var offset = provider._pageSize * page.id;
             var limit = provider._pageSize;

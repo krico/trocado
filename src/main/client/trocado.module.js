@@ -21,8 +21,9 @@
         ExpenseProvider.apiRoot('/_ah/api/expense/v1/');
 
         RepeaterProvider
-            .pageSize(10)
-            .debug(true);
+            .maxPages(4)
+            .pageSize(50)
+            .debug(false);
     }
 
     function runTrocado($log) {
