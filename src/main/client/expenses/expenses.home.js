@@ -6,16 +6,19 @@
     var counter = 198;
     var BATCH_SIZE = 50;
 
-    function ExpensesHomeController($rootScope, $state, $timeout, Dialog, Expense, expenses, Repeater, ToolbarEvents) {
+    function ExpensesHomeController($rootScope, $scope, $state, $timeout, $window, Dialog, Expense, expenses, Repeater,
+                                    ToolbarEvents) {
         var vm = this;
         vm.expenses = expenses.data.items;
         vm.virtualItems = Repeater.forEndpoint(Expense);
+        vm.getListHeight = getListHeight;
 
         vm.getMatches = getMatches;
         vm.selected = selected;
         vm.viewExpense = viewExpense;
         vm.deleteExpense = deleteExpense;
         vm.refresh = refresh;
+        vm.onResize = onResize;
 
         vm.selectedItem = undefined;
         vm.searchText = '';
@@ -27,6 +30,22 @@
 
         $rootScope.$on(ToolbarEvents.Refresh, vm.refresh);
 
+        $window.addEventListener('resize', vm.onResize);
+        $scope.$on('$destroy', function () {
+            $window.removeEventListener('resize', onResize);
+        });
+
+        function getListHeight() {
+            return {height: '' + ($window.innerHeight - 72) + 'px'};
+        }
+
+        function onResize() {
+            $scope.$digest();
+        }
+
+        $scope.$on('$destroy', function () {
+            $window.removeEventListener('resize', onResize);
+        });
 
         function refresh() {
             Expense.query().then(ok, fail);

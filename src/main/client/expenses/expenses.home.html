@@ -1,14 +1,16 @@
-<md-virtual-repeat-container id="expenses-container">
-    <md-list flex-offset="5" flex="90">
-        <md-list-item class="md-2-line" md-virtual-repeat="item in vm.virtualItems" md-whiteframe="1" md-on-demand>
+<md-card flex-offset="5" flex="90" class="md-default-theme">
+<md-virtual-repeat-container id="expenses-container" ng-style="vm.getListHeight()">
+    <md-list>
+        <md-list-item class="md-2-line" md-virtual-repeat="item in vm.virtualItems" md-on-demand>
             <div class="md-list-item-text" layout="column">
                 <h4>{{item.amount | currency}} {{item.description}}</h4>
                 <p class="md-caption">{{item.date | date}}</p>
             </div>
+            <md-divider></md-divider>
         </md-list-item>
     </md-list>
 </md-virtual-repeat-container>
-
+</md-card>
 <md-autocomplete ng-if="false"
                  placeholder="$ your expense (ex: 12.32 lunch)"
                  md-autoselect="true"
