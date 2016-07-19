@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Random;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 public class ExpenseTest {
@@ -26,7 +27,7 @@ public class ExpenseTest {
     public void testAmountConstructor() throws Exception {
         Expense expense = new Expense(Origins.User, "desc", BigDecimal.TEN, new Date());
         assertEquals("desc", expense.getDescription());
-        BigDecimal expected = BigDecimal.TEN.setScale(BigDecimalUtil.AMOUNT_PRECISION, BigDecimal.ROUND_DOWN);
-        assertEquals(expected, expense.getAmount());
+        BigDecimal expected = BigDecimal.TEN;
+        assertTrue(expected.compareTo(expense.getAmount()) == 0);
     }
 }

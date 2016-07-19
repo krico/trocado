@@ -1,6 +1,7 @@
 package to.cwa.trocado;
 
 import com.googlecode.objectify.ObjectifyService;
+import com.googlecode.objectify.impl.translate.opt.BigDecimalLongTranslatorFactory;
 import to.cwa.trocado.account.om.Account;
 import to.cwa.trocado.expense.om.ChaseImportedExpense;
 import to.cwa.trocado.expense.om.Expense;
@@ -17,7 +18,8 @@ public class Trocado {
         initializeObjectify();
     }
 
-    public void initializeObjectify() {
+    static void initializeObjectify() {
+        ObjectifyService.factory().getTranslators().add(new BigDecimalLongTranslatorFactory());
         ObjectifyService.register(Account.class);
         ObjectifyService.register(Expense.class);
         ObjectifyService.register(ChaseImportedExpense.class);

@@ -1,12 +1,10 @@
 package to.cwa.trocado.expense.om;
 
 import com.google.appengine.api.datastore.Category;
-import com.googlecode.objectify.annotation.Entity;
-import com.googlecode.objectify.annotation.Id;
-import com.googlecode.objectify.annotation.Index;
-import com.googlecode.objectify.annotation.OnSave;
+import com.googlecode.objectify.Ref;
+import com.googlecode.objectify.annotation.*;
+import to.cwa.trocado.account.om.Account;
 import to.cwa.trocado.om.HasId;
-import to.cwa.trocado.util.BigDecimalUtil;
 import to.cwa.trocado.util.ObjectsUtil;
 
 import java.math.BigDecimal;
@@ -36,9 +34,15 @@ public class Expense implements HasId<Long> {
     @Index
     private Date date;
     private String description;
-    private long amount;
+    private BigDecimal amount;
     @Index
     private Category origin;
+    /**
+     * The account to which this expense belongs
+     */
+    @Index
+    @Load
+    private Ref<Account> account;
 
     public Expense() {
         this(Origins.User);
@@ -47,7 +51,7 @@ public class Expense implements HasId<Long> {
     protected Expense(Category origin, String description, BigDecimal amount, Date date) {
         this(origin);
         this.description = description;
-        this.amount = BigDecimalUtil.amount(amount);
+        this.amount = amount;
         this.date = date;
     }
 
@@ -68,16 +72,17 @@ public class Expense implements HasId<Long> {
         return id;
     }
 
+    @Override
     public void setId(Long id) {
         this.id = id;
     }
 
     public BigDecimal getAmount() {
-        return BigDecimalUtil.amount(amount);
+        return amount;
     }
 
     public void setAmount(BigDecimal amount) {
-        this.amount = BigDecimalUtil.amount(amount);
+        this.amount = amount;
     }
 
     public String getDescription() {
@@ -112,6 +117,14 @@ public class Expense implements HasId<Long> {
         return origin;
     }
 
+    public Account getAccount() {
+        return ObjectsUtil.get(account);
+    }
+
+    public void setAccount(Account account) {
+        this.account = Ref.create(account);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -119,15 +132,14 @@ public class Expense implements HasId<Long> {
 
         Expense expense = (Expense) o;
 
-        if (amount != expense.amount) return false;
+        if (id != null ? !id.equals(expense.id) : expense.id != null) return false;
         if (created != null ? !created.equals(expense.created) : expense.created != null) return false;
+        if (modified != null ? !modified.equals(expense.modified) : expense.modified != null) return false;
         if (date != null ? !date.equals(expense.date) : expense.date != null) return false;
         if (description != null ? !description.equals(expense.description) : expense.description != null) return false;
-        if (id != null ? !id.equals(expense.id) : expense.id != null) return false;
-        if (modified != null ? !modified.equals(expense.modified) : expense.modified != null) return false;
-        if (origin != null ? !origin.equals(expense.origin) : expense.origin != null) return false;
+        if (amount != null ? !amount.equals(expense.amount) : expense.amount != null) return false;
+        return origin != null ? origin.equals(expense.origin) : expense.origin == null;
 
-        return true;
     }
 
     @Override
@@ -137,7 +149,7 @@ public class Expense implements HasId<Long> {
         result = 31 * result + (modified != null ? modified.hashCode() : 0);
         result = 31 * result + (date != null ? date.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + (int) (amount ^ (amount >>> 32));
+        result = 31 * result + (amount != null ? amount.hashCode() : 0);
         result = 31 * result + (origin != null ? origin.hashCode() : 0);
         return result;
     }

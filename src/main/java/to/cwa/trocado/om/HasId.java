@@ -6,4 +6,5 @@ package to.cwa.trocado.om;
  */
 public interface HasId<T> {
     T getId();
+    void setId(T id);
 }

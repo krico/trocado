@@ -7,10 +7,12 @@ import com.googlecode.objectify.util.Closeable;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import to.cwa.trocado.TestHelper;
 import to.cwa.trocado.expense.om.Expense;
 
 import java.util.List;
 
+import static junit.framework.TestCase.assertNotSame;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -23,8 +25,7 @@ public class ExpenseControllerTest {
     @Before
     public void initialize() {
         helper.setUp();
-        ObjectifyService.register(Expense.class);
-        ofyContext = ObjectifyService.begin();
+        ofyContext = TestHelper.beginObjectify();
     }
 
     @After
@@ -35,7 +36,8 @@ public class ExpenseControllerTest {
 
     @Test
     public void testSave() throws Exception {
-        last = controller.save(new Expense());
+        Expense entity = TestHelper.makeEntity(Expense.class);
+        last = controller.save(entity);
         assertNotNull(last);
         assertNotNull(last.getId());
     }
@@ -45,6 +47,7 @@ public class ExpenseControllerTest {
         testSave();
         Expense gotten = controller.get(last.getId());
         assertEquals(gotten.getId(), last.getId());
+        assertEquals(last, gotten);
     }
 
     @Test
