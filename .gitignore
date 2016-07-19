@@ -8,5 +8,5 @@ dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
 .idea
-trocado.iml
+*.iml
 node_modules
