@@ -21,6 +21,11 @@
         </init-param>
     </servlet>
 
+    <servlet>
+        <servlet-name>auth-user</servlet-name>
+        <servlet-class>to.cwa.auth.http.AuthUserGitkitServlet</servlet-class>
+    </servlet>
+
     <filter>
         <filter-name>ObjectifyFilter</filter-name>
         <filter-class>com.googlecode.objectify.ObjectifyFilter</filter-class>
@@ -33,6 +38,10 @@
     <servlet-mapping>
         <servlet-name>SystemServiceServlet</servlet-name>
         <url-pattern>/_ah/spi/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>auth-user</servlet-name>
+        <url-pattern>/auth-user/*</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
