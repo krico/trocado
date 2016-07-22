@@ -23,12 +23,6 @@
     </prerequisites>
 
     <dependencies>
-        <!-- CWA Dependencies (unless you are working with cwa-parent you will need to install these manually) -->
-        <dependency>
-            <groupId>to.cwa.auth</groupId>
-            <artifactId>auth-user</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
         <!-- Compile/runtime dependencies -->
         <dependency>
             <groupId>com.google.appengine</groupId>
